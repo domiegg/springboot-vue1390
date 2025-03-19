@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.XiangmuDao">
+
+
+
+
+
+
+
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.xiangmu_uuid_number as xiangmuUuidNumber
+        ,a.yonghu_id as yonghuId
+        ,a.xiangmu_name as xiangmuName
+        ,a.xiangmu_photo as xiangmuPhoto
+        ,a.xiangmu_types as xiangmuTypes
+        ,a.xiangmu_file as xiangmuFile
+        ,a.xiangmu_content as xiangmuContent
+        ,a.xiangmuguanliyuan_id as xiangmuguanliyuanId
+        ,a.xiangmu_yesno_types as xiangmuYesnoTypes
+        ,a.xiangmuguanliyuan_content as xiangmuguanliyuanContent
+        ,a.zhuanjia1_uuid_number as zhuanjia1UuidNumber
+        ,a.zhuanjia1_name as zhuanjia1Name
+        ,a.zhuanjia1_types as zhuanjia1Types
+        ,a.zhuanjia1_yijian_content as zhuanjia1YijianContent
+        ,a.zhuanjia2_uuid_number as zhuanjia2UuidNumber
+        ,a.zhuanjia2_name as zhuanjia2Name
+        ,a.zhuanjia2_types as zhuanjia2Types
+        ,a.zhuanjia2_yijian_content as zhuanjia2YijianContent
+        ,a.zhuanjia3_uuid_number as zhuanjia3UuidNumber
+        ,a.zhuanjia3_name as zhuanjia3Name
+        ,a.zhuanjia3_types as zhuanjia3Types
+        ,a.zhuanjia3_yijian_content as zhuanjia3YijianContent
+        ,a.zuizhong_types as zuizhongTypes
+        ,a.create_time as createTime
+    </sql>
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.XiangmuView" >
+        SELECT
+        <include refid="Base_Column_List" />
+
+--         级联表的字段
+        ,xiangmuguanliyuan.xiangmuguanliyuan_name as xiangmuguanliyuanName
+        ,xiangmuguanliyuan.xiangmuguanliyuan_phone as xiangmuguanliyuanPhone
+        ,xiangmuguanliyuan.xiangmuguanliyuan_id_number as xiangmuguanliyuanIdNumber
+        ,xiangmuguanliyuan.xiangmuguanliyuan_photo as xiangmuguanliyuanPhoto
+        ,xiangmuguanliyuan.xiangmuguanliyuan_email as xiangmuguanliyuanEmail
+        ,xiangmuguanliyuan.xiangmuguanliyuan_address as xiangmuguanliyuanAddress
+        ,yonghu.yonghu_name as yonghuName
+        ,yonghu.yonghu_phone as yonghuPhone
+        ,yonghu.yonghu_id_number as yonghuIdNumber
+        ,yonghu.yonghu_photo as yonghuPhoto
+        ,yonghu.yonghu_email as yonghuEmail
+        ,yonghu.yonghu_address as yonghuAddress
+
+        FROM xiangmu  a
+        left JOIN xiangmuguanliyuan xiangmuguanliyuan ON a.xiangmuguanliyuan_id = xiangmuguanliyuan.id
+        left JOIN yonghu yonghu ON a.yonghu_id = yonghu.id
+
+        <where>
+            <if test="params.ids != null">
+                and a.id in
+                <foreach item="item" index="index" collection="params.ids" open="(" separator="," close=")">
+                #{item}
+                </foreach>
+            </if>
+            <if test=" params.xiangmuUuidNumber != '' and params.xiangmuUuidNumber != null and params.xiangmuUuidNumber != 'null' ">
+                and a.xiangmu_uuid_number like CONCAT('%',#{params.xiangmuUuidNumber},'%')
+            </if>
+            <if test="params.yonghuId != null and params.yonghuId != ''">
+                and a.yonghu_id = #{params.yonghuId}
+            </if>
+            <if test=" params.xiangmuName != '' and params.xiangmuName != null and params.xiangmuName != 'null' ">
+                and a.xiangmu_name like CONCAT('%',#{params.xiangmuName},'%')
+            </if>
+            <if test="params.xiangmuTypes != null and params.xiangmuTypes != ''">
+                and a.xiangmu_types = #{params.xiangmuTypes}
+            </if>
+            <if test=" params.xiangmuContent != '' and params.xiangmuContent != null and params.xiangmuContent != 'null' ">
+                and a.xiangmu_content like CONCAT('%',#{params.xiangmuContent},'%')
+            </if>
+            <if test="params.xiangmuguanliyuanId != null and params.xiangmuguanliyuanId != ''">
+                and a.xiangmuguanliyuan_id = #{params.xiangmuguanliyuanId}
+            </if>
+            <if test="params.xiangmuYesnoTypes != null and params.xiangmuYesnoTypes != ''">
+                and a.xiangmu_yesno_types = #{params.xiangmuYesnoTypes}
+            </if>
+            <if test=" params.xiangmuguanliyuanContent != '' and params.xiangmuguanliyuanContent != null and params.xiangmuguanliyuanContent != 'null' ">
+                and a.xiangmuguanliyuan_content like CONCAT('%',#{params.xiangmuguanliyuanContent},'%')
+            </if>
+            <if test=" params.zhuanjia1UuidNumber != '' and params.zhuanjia1UuidNumber != null and params.zhuanjia1UuidNumber != 'null' ">
+                and a.zhuanjia1_uuid_number like CONCAT('%',#{params.zhuanjia1UuidNumber},'%')
+            </if>
+            <if test=" params.zhuanjia1Name != '' and params.zhuanjia1Name != null and params.zhuanjia1Name != 'null' ">
+                and a.zhuanjia1_name like CONCAT('%',#{params.zhuanjia1Name},'%')
+            </if>
+            <if test="params.zhuanjia1Types != null and params.zhuanjia1Types != ''">
+                and a.zhuanjia1_types = #{params.zhuanjia1Types}
+            </if>
+            <if test=" params.zhuanjia1YijianContent != '' and params.zhuanjia1YijianContent != null and params.zhuanjia1YijianContent != 'null' ">
+                and a.zhuanjia1_yijian_content like CONCAT('%',#{params.zhuanjia1YijianContent},'%')
+            </if>
+            <if test=" params.zhuanjia2UuidNumber != '' and params.zhuanjia2UuidNumber != null and params.zhuanjia2UuidNumber != 'null' ">
+                and a.zhuanjia2_uuid_number like CONCAT('%',#{params.zhuanjia2UuidNumber},'%')
+            </if>
+            <if test=" params.zhuanjia2Name != '' and params.zhuanjia2Name != null and params.zhuanjia2Name != 'null' ">
+                and a.zhuanjia2_name like CONCAT('%',#{params.zhuanjia2Name},'%')
+            </if>
+            <if test="params.zhuanjia2Types != null and params.zhuanjia2Types != ''">
+                and a.zhuanjia2_types = #{params.zhuanjia2Types}
+            </if>
+            <if test=" params.zhuanjia2YijianContent != '' and params.zhuanjia2YijianContent != null and params.zhuanjia2YijianContent != 'null' ">
+                and a.zhuanjia2_yijian_content like CONCAT('%',#{params.zhuanjia2YijianContent},'%')
+            </if>
+            <if test=" params.zhuanjia3UuidNumber != '' and params.zhuanjia3UuidNumber != null and params.zhuanjia3UuidNumber != 'null' ">
+                and a.zhuanjia3_uuid_number like CONCAT('%',#{params.zhuanjia3UuidNumber},'%')
+            </if>
+            <if test=" params.zhuanjia3Name != '' and params.zhuanjia3Name != null and params.zhuanjia3Name != 'null' ">
+                and a.zhuanjia3_name like CONCAT('%',#{params.zhuanjia3Name},'%')
+            </if>
+            <if test="params.zhuanjia3Types != null and params.zhuanjia3Types != ''">
+                and a.zhuanjia3_types = #{params.zhuanjia3Types}
+            </if>
+            <if test=" params.zhuanjia3YijianContent != '' and params.zhuanjia3YijianContent != null and params.zhuanjia3YijianContent != 'null' ">
+                and a.zhuanjia3_yijian_content like CONCAT('%',#{params.zhuanjia3YijianContent},'%')
+            </if>
+            <if test="params.zuizhongTypes != null and params.zuizhongTypes != ''">
+                and a.zuizhong_types = #{params.zuizhongTypes}
+            </if>
+
+            <if test=" params.xiangmuguanliyuanName != '' and params.xiangmuguanliyuanName != null and params.xiangmuguanliyuanName != 'null' ">
+                and xiangmuguanliyuan.xiangmuguanliyuan_name like CONCAT('%',#{params.xiangmuguanliyuanName},'%')
+            </if>
+            <if test=" params.xiangmuguanliyuanPhone != '' and params.xiangmuguanliyuanPhone != null and params.xiangmuguanliyuanPhone != 'null' ">
+                and xiangmuguanliyuan.xiangmuguanliyuan_phone like CONCAT('%',#{params.xiangmuguanliyuanPhone},'%')
+            </if>
+            <if test=" params.xiangmuguanliyuanIdNumber != '' and params.xiangmuguanliyuanIdNumber != null and params.xiangmuguanliyuanIdNumber != 'null' ">
+                and xiangmuguanliyuan.xiangmuguanliyuan_id_number like CONCAT('%',#{params.xiangmuguanliyuanIdNumber},'%')
+            </if>
+            <if test=" params.xiangmuguanliyuanEmail != '' and params.xiangmuguanliyuanEmail != null and params.xiangmuguanliyuanEmail != 'null' ">
+                and xiangmuguanliyuan.xiangmuguanliyuan_email like CONCAT('%',#{params.xiangmuguanliyuanEmail},'%')
+            </if>
+            <if test=" params.xiangmuguanliyuanAddress != '' and params.xiangmuguanliyuanAddress != null and params.xiangmuguanliyuanAddress != 'null' ">
+                and xiangmuguanliyuan.xiangmuguanliyuan_address like CONCAT('%',#{params.xiangmuguanliyuanAddress},'%')
+            </if>
+            <if test=" params.yonghuName != '' and params.yonghuName != null and params.yonghuName != 'null' ">
+                and yonghu.yonghu_name like CONCAT('%',#{params.yonghuName},'%')
+            </if>
+            <if test=" params.yonghuPhone != '' and params.yonghuPhone != null and params.yonghuPhone != 'null' ">
+                and yonghu.yonghu_phone like CONCAT('%',#{params.yonghuPhone},'%')
+            </if>
+            <if test=" params.yonghuIdNumber != '' and params.yonghuIdNumber != null and params.yonghuIdNumber != 'null' ">
+                and yonghu.yonghu_id_number like CONCAT('%',#{params.yonghuIdNumber},'%')
+            </if>
+            <if test=" params.yonghuEmail != '' and params.yonghuEmail != null and params.yonghuEmail != 'null' ">
+                and yonghu.yonghu_email like CONCAT('%',#{params.yonghuEmail},'%')
+            </if>
+            <if test=" params.yonghuAddress != '' and params.yonghuAddress != null and params.yonghuAddress != 'null' ">
+                and yonghu.yonghu_address like CONCAT('%',#{params.yonghuAddress},'%')
+            </if>
+        </where>
+
+        order by a.${params.orderBy} desc 
+    </select>
+
+</mapper>
